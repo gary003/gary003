@@ -3,12 +3,12 @@
 ![Node.js](https://img.shields.io/badge/Node.js-20+-green) ![TypeScript](https://img.shields.io/badge/TypeScript-5+-blue) ![Kafka](https://img.shields.io/badge/Kafka-Event%20Driven-orange) ![AWS](https://img.shields.io/badge/AWS-Cloud-blue) ![Docker](https://img.shields.io/badge/Docker-Containerization-blue)
 
 ### 🛠️ Tech Stack Principal
-- **Langages** : Node.js, TypeScript
+- **Langages** : Node.js v24, TypeScript
 - **Frameworks** : NestJS, Express, TypeORM
 - **Messaging** : Kafka (real-time streaming)
 - **DevOps/Cloud** : Docker, Kubernetes, AWS, OpenTelemetry
 - **Observability** : Grafana, Prometheus, Loki, Tempo
-- **Testing** : Jest, Mocha, Sinon (95%+ coverage)
+- **Testing** : vitest, Mocha, Sinon (95%+ coverage)
 - **Patterns** : Clean Architecture, Microservices, TDD
 
 ### 🚀 Projets Phares
