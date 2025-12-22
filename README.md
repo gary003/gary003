@@ -4,17 +4,17 @@
 
 ### 🛠️ Tech Stack Principal
 - **Langages** : Node.js v24, TypeScript
-- **Frameworks** : NestJS, Express, TypeORM
-- **Messaging** : Kafka (real-time streaming)
-- **DevOps/Cloud** : Docker, Kubernetes, AWS, OpenTelemetry
-- **Observability** : Grafana, Prometheus, Loki, Tempo
+- **Frameworks**: NestJS, Express, TypeORM
+- **Messaging**: Kafka (real-time streaming)
+- **DevOps/Cloud**: Docker, Kubernetes, AWS, OpenTelemetry
+- **Observability**: Grafana, Prometheus, Loki, Tempo
 - **Testing** : vitest, Mocha, Sinon (95%+ coverage)
-- **Patterns** : Clean Architecture, Microservices, TDD
+- **Patterns**: Clean Architecture, Microservices, TDD
 
 ### 🚀 Projets Phares
-- **[Event API Kafka Node](https://github.com/gary003/event_api_kafka_node)** – API streaming real-time avec Kafka & TypeScript (producer/consumer scalable)
+- **[Event API Kafka Node](https://github.com/gary003/event_api_kafka_node)** – API streaming en temps réel avec Kafka & TypeScript (producer/consumer scalables)
 - **[REST API Node.js/TypeScript](https://github.com/gary003/rest_api_nodejs_typescript)** – Service production-ready avec TypeORM, tests avancés & observability Grafana
-- **[Kubernetes Wallet API](https://github.com/gary003/kubernetes_rest_api_wallet)** – Déploiement full-stack K8s : HPA, MySQL, OTEL, Prometheus/Loki/Tempo
+- **[Kubernetes Wallet API](https://github.com/gary003/kubernetes_rest_api_wallet)** – Déploiement full-stack K8s: HPA, MySQL, OTEL, Prometheus/Loki/Tempo
 - **[Breaking Bad GraphQL](https://github.com/gary003/breakingBadGraphQL)** – API GraphQL avec resolvers nested
 - **[Structy Mini](https://github.com/gary003/structy_mini)** – Bibliothèque algo/DS (récursion, graphs, DP)
 
@@ -23,6 +23,6 @@
 
 ### 📬 Contact
 - LinkedIn : [linkedin.com/in/gary-johnson-0168b985](https://www.linkedin.com/in/gary-johnson-0168b985/)
-- Email : gary.johnson.top@gmail.com
+- Email: gary.johnson.top@gmail.com
 
-Disponible pour reviews code, conseils architecture ou missions backend/event-driven. 🚀
+Disponible pour reviews code, conseils architectures ou missions backend API REST,event-driven, GraphQL. 🚀
