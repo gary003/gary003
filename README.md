@@ -13,7 +13,7 @@
 
 ### 🚀 Projets Phares
 - **[Event API Kafka Node](https://github.com/gary003/event_api_kafka_node)** – API streaming en temps réel avec Kafka & TypeScript (producer/consumer scalables)
-- **[REST API Node.js/TypeScript](https://github.com/gary003/rest_api_nodejs_typescript)** – Service production-ready avec TypeORM, tests avancés & observability Grafana
+- **[REST API Node.js/TypeScript](https://github.com/gary003/rest_api_nodejs_typescript_esm)** – Service production-ready avec TypeORM, tests avancés & observability Grafana
 - **[Kubernetes Wallet API](https://github.com/gary003/kubernetes_rest_api_wallet)** – Déploiement full-stack K8s: HPA, MySQL, OTEL, Prometheus/Loki/Tempo
 - **[Breaking Bad GraphQL](https://github.com/gary003/breakingBadGraphQL)** – API GraphQL avec resolvers nested
 - **[Structy Mini](https://github.com/gary003/structy_mini)** – Bibliothèque algo/DS (récursion, graphs, DP)
