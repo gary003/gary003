@@ -4,7 +4,7 @@
 
 ### 🛠️ Tech Stack Principal
 - **Langages** : Node.js v24, TypeScript
-- **Frameworks**: NestJS, Express, TypeORM
+- **Frameworks**: Express, TypeORM, Sequelize
 - **Messaging**: Kafka (real-time streaming)
 - **DevOps/Cloud**: Docker, Kubernetes, AWS, OpenTelemetry
 - **Observability**: Grafana, Prometheus, Loki, Tempo
