@@ -26,7 +26,3 @@
 * Email: gary.johnson.top@gmail.com
 
 Available for code reviews, architectural consulting, or backend missions involving REST APIs, event-driven systems, and GraphQL. 🚀
-
----
-
-**Would you like me to create a professional summary for your LinkedIn "About" section based on these skills?**
