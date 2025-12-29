@@ -7,7 +7,7 @@
 * **Messaging**: Kafka (real-time streaming)
 * **DevOps/Cloud**: Docker, Kubernetes, AWS, OpenTelemetry
 * **Observability**: Grafana, Prometheus, Loki, Tempo
-* **Testing**: vitest, Mocha, Sinon (95%+ coverage)
+* **Testing**: vitest, Mocha, Sinon, jest (high coverage [> 80%])
 * **Patterns**: Clean Architecture, Microservices, TDD, Distributed Ledgers
 
 ### 🚀 Key Projects
