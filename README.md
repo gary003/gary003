@@ -8,7 +8,7 @@
 * **DevOps/Cloud**: Docker, Kubernetes, AWS, OpenTelemetry
 * **Observability**: Grafana, Prometheus, Loki, Tempo
 * **Testing**: vitest, Mocha, Sinon, jest (high coverage [> 80%])
-* **Patterns**: Clean Architecture, Microservices, TDD, Distributed Ledgers
+* **Patterns**: Clean Architecture, Microservices, TDD
 
 ### 🚀 Key Projects
 
