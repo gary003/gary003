@@ -16,7 +16,7 @@
 * **[Event API Kafka Node](https://github.com/gary003/event_api_kafka_node)** – Real-time streaming API with resilient Kafka producers/consumers.
 * **[Blockchain API Marks](https://www.google.com/search?q=https://github.com/gary003/blockchain_api_marks)** – Experimental blockchain implementation exploring ledger mechanics and distributed consensus.
 * **[REST API Node.js/TypeScript](https://github.com/gary003/rest_api_nodejs_typescript_esm)** – Production-ready ESM service with TypeORM and advanced testing patterns.
-* **[Structy Mini](https://github.com/gary003/structy_mini)** – Comprehensive algorithm library (Recursion, Graphs, DP).
+* **[Structy Mini](https://github.com/gary003/structy_datastructure)** – Comprehensive algorithm library (Recursion, Graphs, DP).
 
 ### 📊 GitHub Stats
 
