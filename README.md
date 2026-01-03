@@ -2,7 +2,7 @@
 
 ### 🛠️ Core Tech Stack
 
-* **Languages**: Node.js v24, TypeScript
+* **Languages**: Node.js v24, TypeScript 5
 * **Frameworks**: Express, TypeORM, Sequelize
 * **Messaging**: Kafka (real-time streaming)
 * **DevOps/Cloud**: Docker, Kubernetes, AWS, OpenTelemetry
