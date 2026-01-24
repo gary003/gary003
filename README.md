@@ -25,6 +25,6 @@
 * LinkedIn: [linkedin.com/in/gary-johnson-0168b985](https://www.linkedin.com/in/gary-johnson-0168b985/)
 * Email: gary.johnson.top@gmail.com
 * Codingame: [codingame.com/profile/e2949613ed833bbaece4363a2595c78c2876311](https://www.codingame.com/profile/e2949613ed833bbaece4363a2595c78c2876311)
-* Structy: [![Structy](https://img.shields.io/badge/Training-Structy-%230dbd8b?style=for-the-badge&logo=datastax&logoColor=white)](https://github.com/gary003/structy_datastructure)
+* Structy: [github.com/gary003/structy_datastructure](https://github.com/gary003/structy_datastructure)
 
 Available for code reviews, architectural consulting, or backend missions involving REST APIs, event-driven systems, and crypto/ledger technology. 🚀
