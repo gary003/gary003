@@ -24,6 +24,6 @@
 
 * LinkedIn: [linkedin.com/in/gary-johnson-0168b985](https://www.linkedin.com/in/gary-johnson-0168b985/)
 * Email: gary.johnson.top@gmail.com
-* Codingame: [![CodinGame](https://img.shields.io/badge/CodinGame-f2bb13?style=for-the-badge&logo=codingame&logoColor=white)](https://www.codingame.com/profile/e2949613ed833bbaece4363a2595c78c2876311)
+* Codingame: [codingame.com/profile/e2949613ed833bbaece4363a2595c78c2876311](https://www.codingame.com/profile/e2949613ed833bbaece4363a2595c78c2876311)
 
 Available for code reviews, architectural consulting, or backend missions involving REST APIs, event-driven systems, and crypto/ledger technology. 🚀
