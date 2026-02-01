@@ -18,8 +18,6 @@
 * **[Event API Kafka Node](https://github.com/gary003/event_api_kafka_node)** – Real-time streaming API with resilient Kafka producers/consumers.
 * **[Blockchain API Marks](https://www.google.com/search?q=https://github.com/gary003/blockchain_api_marks)** – Experimental blockchain implementation exploring ledger mechanics and distributed consensus.
 
-### 📊 GitHub Stats
-
 ### 📬 Contact
 
 * LinkedIn: [linkedin.com/in/gary-johnson-0168b985](https://www.linkedin.com/in/gary-johnson-0168b985/)
