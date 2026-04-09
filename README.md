@@ -3,8 +3,9 @@
 ## 🛠️ Core Tech Stack
 
 - **Languages**: Node.js v24, TypeScript v5
-- **Frameworks**: Express, TypeORM, Sequelize, Socket.io, GraphQL
-- **Messaging**: Kafka (real-time streaming)
+- **Frameworks**: Express, NestJS, GraphQL
+- **Orms**: TypeORM, Sequelize, Mongoose
+- **Messaging**: Kafka, RabbitMQ, Socket.io
 - **DevOps/Cloud**: Docker, Kubernetes, AWS, OpenTelemetry
 - **Observability**: Grafana, Prometheus, Loki, Tempo
 - **Testing**: Vitest, Sinon, Jest, Testcontainers, Mocha, Chai (high coverage [> 80%])
