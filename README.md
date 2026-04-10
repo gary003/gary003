@@ -4,11 +4,12 @@
 
 - **Languages**: Node.js v24, TypeScript v5
 - **Frameworks**: Express, NestJS, GraphQL
+- **Databases**: PostgreSQL, MySQL, MongoDB, Redis, SQL
 - **Orms**: TypeORM, Sequelize, Mongoose
 - **Messaging**: Kafka, RabbitMQ, Socket.io
 - **DevOps/Cloud**: Docker, Kubernetes, AWS, OpenTelemetry
 - **Observability**: Grafana, Prometheus, Loki, Tempo
-- **Testing**: Vitest, Sinon, Jest, Testcontainers, Mocha, Chai (high coverage [> 80%])
+- **Testing**: Vitest, Sinon, Jest, Testcontainers, Mocha, Chai
 - **Patterns**: Clean Architecture, Microservices, TDD, DDD
 
 ## 🚀 Key Projects
@@ -21,6 +22,7 @@
 
 ## 📬 Contact
 
+- Malt: [malt.fr/profile/garyjohnson](https://www.malt.fr/profile/garyjohnson1)
 - LinkedIn: [linkedin.com/in/gary-johnson-0168b985](https://www.linkedin.com/in/gary-johnson-0168b985/)
 - Email: <gary.johnson.top@gmail.com>
 - Codingame: [codingame.com/profile/e2949613ed833bbaece4363a2595c78c2876311](https://www.codingame.com/profile/e2949613ed833bbaece4363a2595c78c2876311)
