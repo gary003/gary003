@@ -1,0 +1,792 @@
+
+------- file: ./package.json -------
+{
+  "name": "data_generator",
+  "version": "1.0.0",
+  "description": "generate fake data for the api service",
+  "main": "src/bin/server.ts",
+  "scripts": {
+    "build": "npx tsc -p .",
+    "start:dist": "npm run build && node ./dist/src/bin/server.js",
+    "docker:build": "docker build -t event-api .",
+    "docker:run": "docker run -p 3000:3000 --env-file .env event-api",
+    "stop": "docker-compose down -v",
+    "start": "npm run stop && docker-compose up --build",
+    "minify": "bash ./scripts/minify_p.sh"
+  },
+  "author": "Gary Johnson",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.5.0",
+    "express": "^5.1.0",
+    "helmet": "^8.1.0",
+    "kafkajs": "^2.2.4",
+    "node-fetch": "^3.3.2",
+    "ts-node": "^10.7.0",
+    "typescript": "^4.4.4"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.18",
+    "@types/express": "^5.0.1",
+    "@types/node": "^22.14.1"
+  }
+}
+
+------- file: ./eslint.config.mjs -------
+import eslint from '@typescript-eslint/eslint-plugin'
+import tsParser from '@typescript-eslint/parser'
+
+export default [
+  {
+    files: ['**/*.ts'],
+    ignores: ['**/node_modules/**', '**/dist/**', '**/build/**', '**/coverage/**', '**/logs/**', '**/entity.ts'], // Ignore build and dependency folders
+    plugins: {
+      '@typescript-eslint': eslint
+    },
+    languageOptions: {
+      parser: tsParser,
+      parserOptions: {
+        ecmaVersion: 'latest',
+        sourceType: 'module'
+      }
+    },
+    rules: {
+      // General Code Quality Rules
+      'no-unused-vars': 'warn', // Disable base rule in favor of @typescript-eslint/no-unused-vars
+      '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_', varsIgnorePattern: '^_' }], // Allow unused variables starting with `_`
+      '@typescript-eslint/no-explicit-any': 'warn', // Warn against using `any` type
+      // '@typescript-eslint/explicit-function-return-type': 'warn', // Encourage explicit return types for functions
+      // '@typescript-eslint/no-inferrable-types': 'warn', // Disallow explicit type declarations when they can be inferred
+      // '@typescript-eslint/no-empty-function': 'warn', // Warn against empty functions
+
+      // Style and Formatting Rules
+      indent: ['error', 2], // Enforce 2-space indentation
+      quotes: ['error', 'single'] // Enforce single quotes
+      // 'object-curly-spacing': ['error', 'always'], // Enforce spaces inside curly braces
+      // 'array-bracket-spacing': ['error', 'never'], // Disallow spaces inside array brackets
+      // 'space-before-function-paren': ['error', 'never'], // No space before function parentheses
+    }
+  }
+]
+
+------- file: ./scripts/minify_p.sh -------
+DIR_NAME=$(basename "$PWD")
+CURRENT_DATE=$(date +%Y%m%d_%H%M%S)
+
+rm -f PROJECT_DUMP_* && echo "Previous dump file deleted"
+
+OUTPUT_FILE="PROJECT_DUMP_${DIR_NAME}_${CURRENT_DATE}.txt"
+
+echo "" > "$OUTPUT_FILE"
+
+find . -type f \
+! -path "./PROJECT_DUMP_*" \
+! -path "*/node_modules/*" \
+! -path "*/logs/*" \
+! -path "*/coverage/*" \
+! -path "*/db_volume/*" \
+! -path "*/db_file_volume/*" \
+! -path "*/grafana_data_volume/*" \
+! -path "*/promtail/*" \
+! -path "*/trace_data_volume/*" \
+! -path "*/.git/*" \
+! -path "*/github/*" \
+! -name "package-lock.json" | \
+while read -r file; do
+    echo "------- file: $file -------" >> "$OUTPUT_FILE"
+    cat "$file" >> "$OUTPUT_FILE"
+    echo "" >> "$OUTPUT_FILE"
+done
+
+echo "Project dump file (${OUTPUT_FILE}) created in root directory"
+
+------- file: ./tests/data_generator/src/index.ts -------
+export const fetchWithRateLimit = async () => {
+  const planetsArr = ['nova', 'black hole', 'star', 'comet', 'dwarf']
+  const planetsCount = Math.floor(Math.random() * 1000)
+
+  const planetIndex = Math.floor(Math.random() * planetsArr.length)
+  const data = `Found in picture - ${planetsCount} ${planetsArr[planetIndex]}(s)`
+
+  return {
+    data,
+    timestamp: Date.now()
+  }
+}
+
+------- file: ./README.md -------
+# event API nodejs - typescript - Kafka
+
+## Description
+
+This repository is a backend event api streaming data.
+
+## Prerequisites
+
+- Having docker(v27+) & docker-compose(v2.20) installed
+
+!! A docker group must be created, then your user(sudoer) is added to it.
+Otherwise you'll have trouble launching the tests !!
+
+Link to install and configure docker properly :
+
+    https://medium.com/devops-technical-notes-and-manuals/how-to-run-docker-commands-without-sudo-28019814198f
+
+Don't forgot to restart your computer or session for the changes to be available on all shells
+
+## Git Installation
+
+- Clone the project
+
+  `git clone https://github.com/gary003/event_api_nodejs_typescript.git`
+
+- Go into the project directory
+
+  `cd event_api_nodejs_typescript`
+
+- Install the dependences
+
+  `npm install`
+
+## Start API
+
+- Launch the data generation api
+
+  `docker-compose up`
+
+## Developer
+
+- Gary Johnson
+  - Mail: gary.johnson.top@gmail.com
+  - Github: https://github.com/gary003
+  - LinkedIn: https://www.linkedin.com/in/gary-johnson-0168b985/
+
+## License
+
+    [MIT]
+
+------- file: ./.c8rc.json -------
+{
+  "include": ["src/v1"],
+  "thresholds": {
+    "branches": 80,
+    "lines": 85,
+    "functions": 90,
+    "statements": 85
+  }
+}
+
+------- file: ./docker-compose.yaml -------
+services:
+  zookeeper:
+    image: confluentinc/cp-zookeeper:7.9.0
+    logging:
+      driver: 'none'
+    hostname: zookeeper
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+    ports:
+      - '2181:2181'
+    networks:
+      - kafka-net
+
+  kafka:
+    image: confluentinc/cp-kafka:7.9.0
+    logging:
+      driver: 'json-file'
+    hostname: kafka
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092,PLAINTEXT_HOST://localhost:29092
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: 'true'
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+    ports:
+      - '9092:9092'
+      - '29092:29092'
+    healthcheck:
+      test: ['CMD', 'kafka-broker-api-versions', '--bootstrap-server', 'localhost:9092']
+      interval: 15s
+      timeout: 25s
+      retries: 15
+      start_period: 60s
+    networks:
+      - kafka-net
+
+  app:
+    build: .
+    logging:
+      driver: 'json-file'
+      options:
+        max-size: '10m'
+        max-file: '3'
+    environment:
+      KAFKA_BROKERS: kafka:9092
+    depends_on:
+      kafka:
+        condition: service_healthy
+    ports:
+      - '3000:3000'
+    networks:
+      - kafka-net
+
+networks:
+  kafka-net:
+    driver: bridge
+
+------- file: ./tsconfig.json -------
+{
+  "compilerOptions": {
+    /* Visit https://aka.ms/tsconfig.json to read more about this file */
+
+    /* Projects */
+    // "incremental": true,                              /* Enable incremental compilation */
+    // "composite": true,                                /* Enable constraints that allow a TypeScript project to be used with project references. */
+    // "tsBuildInfoFile": "./",                          /* Specify the folder for .tsbuildinfo incremental compilation files. */
+    // "disableSourceOfProjectReferenceRedirect": true,  /* Disable preferring source files instead of declaration files when referencing composite projects */
+    // "disableSolutionSearching": true,                 /* Opt a project out of multi-project reference checking when editing. */
+    // "disableReferencedProjectLoad": true,             /* Reduce the number of projects loaded automatically by TypeScript. */
+
+    /* Language and Environment */
+    "target": "es2017" /* Set the JavaScript language version for emitted JavaScript and include compatible library declarations. */,
+    // "lib": [],                                        /* Specify a set of bundled library declaration files that describe the target runtime environment. */
+    // "jsx": "preserve",                                /* Specify what JSX code is generated. */
+    "experimentalDecorators": true /* Enable experimental support for TC39 stage 2 draft decorators. */,
+    "emitDecoratorMetadata": true /* Emit design-type metadata for decorated declarations in source files. */,
+    // "jsxFactory": "",                                 /* Specify the JSX factory function used when targeting React JSX emit, e.g. 'React.createElement' or 'h' */
+    // "jsxFragmentFactory": "",                         /* Specify the JSX Fragment reference used for fragments when targeting React JSX emit e.g. 'React.Fragment' or 'Fragment'. */
+    // "jsxImportSource": "",                            /* Specify module specifier used to import the JSX factory functions when using `jsx: react-jsx*`.` */
+    // "reactNamespace": "",                             /* Specify the object invoked for `createElement`. This only applies when targeting `react` JSX emit. */
+    // "noLib": true,                                    /* Disable including any library files, including the default lib.d.ts. */
+    // "useDefineForClassFields": true,                  /* Emit ECMAScript-standard-compliant class fields. */
+
+    /* Modules */
+    "module": "commonjs" /* Specify what module code is generated. */,
+    // "rootDir": "./src" /* Specify the root folder within your source files. */,
+    "moduleResolution": "node" /* Specify how TypeScript looks up a file from a given module specifier. */,
+    // "baseUrl": "./",                                  /* Specify the base directory to resolve non-relative module names. */
+    // "paths": {},                                      /* Specify a set of entries that re-map imports to additional lookup locations. */
+    // "rootDirs": [],                                   /* Allow multiple folders to be treated as one when resolving modules. */
+    // "typeRoots": [],                                  /* Specify multiple folders that act like `./node_modules/@types`. */
+    // "types": [],                                      /* Specify type package names to be included without being referenced in a source file. */
+    // "allowUmdGlobalAccess": true,                     /* Allow accessing UMD globals from modules. */
+    "resolveJsonModule": true /* Enable importing .json files */,
+    // "noResolve": true,                                /* Disallow `import`s, `require`s or `<reference>`s from expanding the number of files TypeScript should add to a project. */
+
+    /* JavaScript Support */
+    // "allowJs": true,                                  /* Allow JavaScript files to be a part of your program. Use the `checkJS` option to get errors from these files. */
+    // "checkJs": true,                                  /* Enable error reporting in type-checked JavaScript files. */
+    // "maxNodeModuleJsDepth": 1,                        /* Specify the maximum folder depth used for checking JavaScript files from `node_modules`. Only applicable with `allowJs`. */
+
+    /* Emit */
+    // "declaration": true,                              /* Generate .d.ts files from TypeScript and JavaScript files in your project. */
+    // "declarationMap": true,                           /* Create sourcemaps for d.ts files. */
+    // "emitDeclarationOnly": true,                      /* Only output d.ts files and not JavaScript files. */
+    // "sourceMap": true,                                /* Create source map files for emitted JavaScript files. */
+    // "outFile": "./",                                  /* Specify a file that bundles all outputs into one JavaScript file. If `declaration` is true, also designates a file that bundles all .d.ts output. */
+    "outDir": "./dist" /* Specify an output folder for all emitted files. */,
+    // "removeComments": true,                           /* Disable emitting comments. */
+    // "noEmit": true,                                   /* Disable emitting files from a compilation. */
+    // "importHelpers": true,                            /* Allow importing helper functions from tslib once per project, instead of including them per-file. */
+    // "importsNotUsedAsValues": "remove",               /* Specify emit/checking behavior for imports that are only used for types */
+    // "downlevelIteration": true,                       /* Emit more compliant, but verbose and less performant JavaScript for iteration. */
+    // "sourceRoot": "",                                 /* Specify the root path for debuggers to find the reference source code. */
+    // "mapRoot": "",                                    /* Specify the location where debugger should locate map files instead of generated locations. */
+    // "inlineSourceMap": true,                          /* Include sourcemap files inside the emitted JavaScript. */
+    // "inlineSources": true,                            /* Include source code in the sourcemaps inside the emitted JavaScript. */
+    // "emitBOM": true,                                  /* Emit a UTF-8 Byte Order Mark (BOM) in the beginning of output files. */
+    // "newLine": "crlf",                                /* Set the newline character for emitting files. */
+    // "stripInternal": true,                            /* Disable emitting declarations that have `@internal` in their JSDoc comments. */
+    // "noEmitHelpers": true,                            /* Disable generating custom helper functions like `__extends` in compiled output. */
+    // "noEmitOnError": true,                            /* Disable emitting files if any type checking errors are reported. */
+    // "preserveConstEnums": true,                       /* Disable erasing `const enum` declarations in generated code. */
+    // "declarationDir": "./",                           /* Specify the output directory for generated declaration files. */
+
+    /* Interop Constraints */
+    // "isolatedModules": true,                          /* Ensure that each file can be safely transpiled without relying on other imports. */
+    // "allowSyntheticDefaultImports": true,             /* Allow 'import x from y' when a module doesn't have a default export. */
+    "esModuleInterop": true /* Emit additional JavaScript to ease support for importing CommonJS modules. This enables `allowSyntheticDefaultImports` for type compatibility. */,
+    // "preserveSymlinks": true,                         /* Disable resolving symlinks to their realpath. This correlates to the same flag in node. */
+    "forceConsistentCasingInFileNames": true /* Ensure that casing is correct in imports. */,
+
+    /* Type Checking */
+    "strict": true /* Enable all strict type-checking options. */,
+    // "noImplicitAny": true,                            /* Enable error reporting for expressions and declarations with an implied `any` type.. */
+    // "strictNullChecks": true,                         /* When type checking, take into account `null` and `undefined`. */
+    // "strictFunctionTypes": true,                      /* When assigning functions, check to ensure parameters and the return values are subtype-compatible. */
+    // "strictBindCallApply": true,                      /* Check that the arguments for `bind`, `call`, and `apply` methods match the original function. */
+    // "strictPropertyInitialization": true,             /* Check for class properties that are declared but not set in the constructor. */
+    // "noImplicitThis": true,                           /* Enable error reporting when `this` is given the type `any`. */
+    // "useUnknownInCatchVariables": true,               /* Type catch clause variables as 'unknown' instead of 'any'. */
+    "alwaysStrict": true /* Ensure 'use strict' is always emitted. */,
+    // "noUnusedLocals": true /* Enable error reporting when a local variables aren't read. */,
+    // "noUnusedParameters": true,                       /* Raise an error when a function parameter isn't read */
+    // "exactOptionalPropertyTypes": true,               /* Interpret optional property types as written, rather than adding 'undefined'. */
+    "noImplicitReturns": true /* Enable error reporting for codepaths that do not explicitly return in a function. */,
+    // "noFallthroughCasesInSwitch": true,               /* Enable error reporting for fallthrough cases in switch statements. */
+    "noUncheckedIndexedAccess": true /* Include 'undefined' in index signature results */,
+    // "noImplicitOverride": true,                       /* Ensure overriding members in derived classes are marked with an override modifier. */
+    // "noPropertyAccessFromIndexSignature": true,       /* Enforces using indexed accessors for keys declared using an indexed type */
+    // "allowUnusedLabels": true,                        /* Disable error reporting for unused labels. */
+    // "allowUnreachableCode": true,                     /* Disable error reporting for unreachable code. */
+
+    /* Completeness */
+    // "skipDefaultLibCheck": true,                      /* Skip type checking .d.ts files that are included with TypeScript. */
+    "skipLibCheck": true /* Skip type checking all .d.ts files. */
+  },
+  "include": ["./src/**/*", "tests/data_generator"]
+}
+
+------- file: ./src/routes/eventRoutes.ts -------
+import express, { Response } from 'express'
+
+const router = express.Router()
+
+router.route('/').get((_, res: Response) => {
+  res.status(200).json({ data: 2 })
+})
+
+export default router
+
+------- file: ./src/app.ts -------
+import express, { Application, Request, Response } from 'express'
+import cors from 'cors'
+import helmet from 'helmet'
+import dotenv from 'dotenv'
+import eventRoutes from './routes/eventRoutes'
+
+// Load environment variables
+dotenv.config()
+
+// Initialize Express app
+const app: Application = express()
+
+// Middleware
+app.use(helmet()) // Security headers
+app.use(cors()) // Enable CORS for cross-origin requests
+app.use(express.json()) // Parse JSON bodies
+app.use(express.urlencoded({ extended: true })) // Parse URL-encoded bodies
+
+// Routes
+app.use('/api/events', eventRoutes) // Event-related endpoints
+
+// Health check endpoint
+app.get('/health', (req: Request, res: Response) => {
+  res.status(200).json({ status: 'OK', uptime: process.uptime() })
+})
+
+// Handle 404 errors
+app.use((req: Request, res: Response) => {
+  res.status(404).json({ message: 'Route not found' })
+})
+
+export default app
+
+------- file: ./src/messageQ/producer.ts -------
+import { producer } from './initMQ'
+import { randomUUID } from 'node:crypto'
+
+const delay = 10000
+
+export async function runProducer() {
+  await producer.connect()
+
+  while(true){
+    const newMessage = fetchAndCreateFakeMessage()
+    
+    const topic = 'astronomy'
+    
+    try {
+      const eventMessage = {
+        topic,
+        messages: [{ value: JSON.stringify(newMessage) }],
+        publishDate: Date.now()
+      }
+
+      await producer.send(eventMessage)
+
+      // console.info(`Published event to topic ${topic}`)
+    } catch (error) {
+      console.error(`Failed to publish event to ${topic}:`, error)
+      await producer.disconnect()
+      throw error
+    }
+
+    await new Promise((resolve) => setTimeout(resolve, delay))
+  }
+}
+
+export const fetchAndCreateFakeMessage = () => {
+  const spaceBodies = ['nova', 'black hole', 'star', 'comet', 'dwarf']
+
+  const planetsCount = Math.floor(Math.random() * 1000)
+  
+  const planetIndex = Math.floor(Math.random() * spaceBodies.length)
+
+  const body = `Found in picture - ${planetsCount} ${spaceBodies[planetIndex]}(s)`
+
+  return {
+    key: randomUUID(),
+    value: body,
+    topic: 'astronomy',
+    timestamp: new Date().toISOString()
+  }
+}
+
+------- file: ./src/messageQ/initMQ.ts -------
+import { Kafka, Partitioners } from 'kafkajs'
+
+// Initialize Kafka client
+const kafka = new Kafka({
+  clientId: 'event-api',
+  brokers: [process.env.KAFKA_BROKERS || 'kafka:9092']
+})
+
+// Create producer with legacy partitioner to avoid warning
+export const producer = kafka.producer({
+  createPartitioner: Partitioners.LegacyPartitioner
+})
+
+// Create consumer
+export const consumer = kafka.consumer({ groupId: 'event-group' })
+
+------- file: ./src/messageQ/consumer.ts -------
+import { consumer } from './initMQ'
+
+const delay = 2000
+
+export const runConsumer = async () => {
+  await consumer.connect()
+  await consumer.subscribe({ topic: 'astronomy', fromBeginning: true })
+  await consumer.run({
+    eachMessage: async ({ message }) => {
+      // // Database save
+      //   await EventModel.create({
+      //     type: eventData.type,
+      //     data: eventData.data,
+      //     source: eventData.source || 'kafka'
+      //   })
+
+      console.info(`Processed event: astronomy ; message : ${(message.value)} on topic`)
+    }
+  })
+
+  await new Promise((resolve) => setTimeout(resolve, delay))
+}
+
+// Handle consumer shutdown
+process.on('SIGTERM', async () => {
+  console.info('Disconnecting Kafka consumer...')
+  await consumer.disconnect()
+  console.info('Kafka consumer disconnected')
+})
+
+------- file: ./src/bin/server.ts -------
+import http from 'http'
+import app from '../app'
+
+import { producer } from '../messageQ/initMQ'
+import { runConsumer } from '../messageQ/consumer'
+import { runProducer } from '../messageQ/producer'
+
+// Create HTTP server
+const server = http.createServer(app)
+const port = process.env.PORT || '3000'
+
+// Check Kafka connectivity by connecting producer and sending a test message
+const checkKafkaConnectivity = async () => {
+  try {
+    await producer.connect()
+    // Optional: Send a test message to ensure topic creation and broker readiness
+    await producer.send({
+      topic: 'test-connectivity',
+      messages: [{ value: JSON.stringify({ test: 'ping' }) }]
+    })
+    console.info('Kafka broker is fully reachable and operational')
+    await producer.disconnect()
+    return true
+  } catch (error) {
+    console.error('Kafka broker not reachable:', error)
+    return false
+  }
+}
+
+// Start Kafka consumer with retry and connectivity check
+const startConsumerWithRetry = async (retries = 5, delay = 5000) => {
+  for (let attempt = 1; attempt <= retries; attempt++) {
+    const kafkaReady = await checkKafkaConnectivity()
+    if (kafkaReady) {
+      try {
+        console.info('Starting Kafka consumer...')
+        await runConsumer()
+        console.info('Kafka consumer started successfully')
+        return
+      } catch (err) {
+        console.error(`Failed to start Kafka consumer: ${err}`)
+      }
+    } else {
+      console.warn('Kafka not fully ready yet')
+    }
+
+    if (attempt === retries) {
+      console.error('Max retries reached. Exiting...')
+      process.exit(1)
+    }
+
+    console.info(`Retrying in ${delay / 1000} seconds...`)
+    
+    await new Promise((resolve) => setTimeout(resolve, delay))
+  }
+}
+
+// Add this new function
+const startProducerWithRetry = async (retries = 5, delay = 5000) => {
+  // Create an async iterator for the attempts
+  const attempts = Array(retries).fill(0).map((_, index) => index +1)
+
+  for await (const attempt of attempts) {
+    console.info(`Connecting Kafka producer (attempt ${attempt}/${retries})`)
+    const kafkaReady = await checkKafkaConnectivity()
+
+    if (kafkaReady) {
+      try {
+        console.info('Starting Kafka producer...')
+        await runProducer() // Your producer initialization logic
+        console.info('Kafka producer started successfully')
+        return
+      } catch (err) {
+        console.error(`Failed to start Kafka producer: ${err}`)
+      }
+    }
+
+    if (attempt === retries) {
+      console.error('Max producer retries reached')
+      throw new Error('Kafka producer initialization failed')
+    }
+
+    await new Promise((resolve) => setTimeout(resolve, delay))
+  }
+}
+
+// Start server and consumer
+const startServer = async () => {
+  try {
+    server.listen(port)
+
+    await startConsumerWithRetry()
+
+    await startProducerWithRetry()
+  } catch (err) {
+    console.error('Unexpected error starting server:', err)
+    process.exit(1)
+  }
+}
+
+/**
+ * Event listener for HTTP server "error" event.
+ */
+const onError = (error: NodeJS.ErrnoException) => {
+  if (error.syscall !== 'listen') {
+    throw error
+  }
+
+  const bind = typeof port === 'string' ? `Pipe ${port}` : `Port ${port}`
+
+  if (error.code === 'EACCES') {
+    console.error(`${bind} requires elevated privileges`)
+    process.exit(1)
+  } else if (error.code === 'EADDRINUSE') {
+    console.error(`${bind} is already in use`)
+    process.exit(1)
+  } else {
+    throw error
+  }
+}
+
+/**
+ * Event listener for HTTP server "listening" event.
+ */
+const onListening = () => {
+  const addr = server.address()
+  const bind = typeof addr === 'string' ? `pipe ${addr}` : `port ${addr?.port}`
+  console.info(`Server listening on ${bind}`)
+}
+
+/**
+ * Graceful shutdown handler
+ */
+const shutdown = (signal: string) => {
+  console.info(`Received ${signal}. Shutting down gracefully...`)
+  server.close(() => {
+    console.info('HTTP server closed.')
+    process.exit(0)
+  })
+
+  producer.disconnect()
+
+  setTimeout(() => {
+    console.error('Could not close connections in time, forcefully shutting down')
+    process.exit(1)
+  }, 10000)
+}
+
+server.on('error', onError)
+server.on('listening', onListening)
+
+// Handle graceful shutdown
+process.on('SIGTERM', () => shutdown('SIGTERM'))
+process.on('SIGINT', () => shutdown('SIGINT'))
+
+startServer()
+
+------- file: ./Dockerfile -------
+# Stage 1: Build stage
+FROM node:23-slim
+
+WORKDIR /app
+
+COPY package*.json .
+
+# Install all dependencies including devDependencies
+RUN npm i
+
+# Copy source files
+COPY . .
+
+# Expose the application port
+EXPOSE 3000
+
+RUN npm run build
+
+# Start the application
+CMD ["node", "./dist/src/bin/server.js"]
+------- file: ./.prettierrc -------
+{
+  "semi": false,
+  "singleQuote": true,
+  "trailingComma": "none",
+  "printWidth": 180,
+  "tabWidth": 2,
+  "useTabs": false,
+  "jsxSingleQuote": true,
+  "arrowParens": "always",
+  "endOfLine": "auto"
+}
+
+------- file: ./.gitignore -------
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+
+# Diagnostic reports (https://nodejs.org/api/report.html)
+report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
+
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# clinic supervision load test
+.clinic
+
+# Docker
+dist/
+
+# Directory for instrumented libs generated by jscoverage/JSCover
+lib-cov
+
+# Coverage directory used by tools like istanbul
+coverage
+*.lcov
+
+# nyc test coverage
+.nyc_output
+
+# Grunt intermediate storage (https://gruntjs.com/creating-plugins#storing-task-files)
+.grunt
+
+# Bower dependency directory (https://bower.io/)
+bower_components
+
+# node-waf configuration
+.lock-wscript
+
+# Compiled binary addons (https://nodejs.org/api/addons.html)
+build/Release
+
+# Dependency directories
+node_modules/
+jspm_packages/
+
+# TypeScript v1 declaration files
+typings/
+
+# TypeScript cache
+*.tsbuildinfo
+
+# Optional npm cache directory
+.npm
+
+# Optional eslint cache
+.eslintcache
+
+# Microbundle cache
+.rpt2_cache/
+.rts2_cache_cjs/
+.rts2_cache_es/
+.rts2_cache_umd/
+
+# Optional REPL history
+.node_repl_history
+
+# Output of 'npm pack'
+*.tgz
+
+# Yarn Integrity file
+.yarn-integrity
+
+# dotenv environment variables file
+.env
+.env.test
+
+# parcel-bundler cache (https://parceljs.org/)
+.cache
+
+# Next.js build output
+.next
+
+# Nuxt.js build / generate output
+.nuxt
+dist
+
+# Gatsby files
+.cache/
+# Comment in the public line in if your project uses Gatsby and *not* Next.js
+# https://nextjs.org/blog/next-9-1#public-directory-support
+# public
+
+# vuepress build output
+.vuepress/dist
+
+# Serverless directories
+.serverless/
+
+# FuseBox cache
+.fusebox/
+
+# DynamoDB Local files
+.dynamodb/
+
+# TernJS port file
+.tern-port
+
